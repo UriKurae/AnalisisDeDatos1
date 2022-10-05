@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class AnalyticsController : MonoBehaviour
 {
-    // List of player Datas
-    List<PlayerData> players;
+    [SerializeField]
+    private Server phpServer;
 
-    // Start is called before the first frame update
     private void OnEnable()
     {
         Simulator.OnNewPlayer += PlayerAdded;
@@ -40,9 +39,7 @@ public class AnalyticsController : MonoBehaviour
         newPlayerData.country = arg2;
         newPlayerData.data = arg3;
 
-        newPlayerData.id = (uint)players.Count;
-
-        players.Add(newPlayerData);
+        phpServer.Save(newPlayerData);
 
         Debug.Log("Player Added");
     }

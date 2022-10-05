@@ -10,12 +10,27 @@ $conn = new mysqli($servername, $username, $password, $database);
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
-echo "Connected successfully";
+//echo "This unity connected succesfully";
 
-$sql = "INSERT INTO `Users` (`IdUser`, `Name`, `Country`, `Date`) VALUES ('265254215', 'testUser12', 'Suiza', '2022-5-29')";
+//$sql = "INSERT INTO `Users` (`IdUser`, `Name`, `Country`, `Date`) VALUES ('265254215', 'testUser12', 'Suiza', '2022-5-29')";
+
+$sql = "SELECT IdUser, Name, Country, Date FROM Users";
 $result = $conn->query($sql);
 
-//$sql = "SELECT IdUser, Name, Country, Date FROM Users";
+if (isset($_REQUEST["Name"]) && isset($_REQUEST["Country"]) && isset($_REQUEST["Date"]))
+{
+  $name = $_POST["Name"];
+  $country = $_POST["Country"];
+  $timestamp = $_POST["Date"];
+  //echo "Received ". $_POST["Name"] . " Sucessfully received";
+
+  $query = "INSERT INTO `Users` (`Name`, `Country`, `Date`) VALUES ('$name', '$country', '$timestamp')";
+  $result = mysqli_query($conn,$query) or die('just  died');
+  $last_inserted = mysqli_insert_id($conn);
+  print($last_inserted);
+
+  exit();
+}
 
 // if ($result->num_rows > 0) {
 //   // output data of each row

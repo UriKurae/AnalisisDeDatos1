@@ -17,7 +17,6 @@ public class PlayerData : EventData
 {
 
     // Data from the player
-    public uint id;
     public string name, country;
     public DateTime data;
 
