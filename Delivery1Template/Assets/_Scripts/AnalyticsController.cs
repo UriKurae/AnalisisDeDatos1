@@ -23,12 +23,14 @@ public class AnalyticsController : MonoBehaviour
 
     private void EndSessionAdded(DateTime obj)
     {
+
+        
         throw new NotImplementedException();
     }
 
     private void NewSessionAdded(DateTime obj)
     {
-        throw new NotImplementedException();
+        phpServer.SaveSessions();
     }
 
     private void PlayerAdded(string arg1, string arg2, DateTime arg3)

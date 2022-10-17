@@ -9,8 +9,10 @@ public class Server : MonoBehaviour
     // Player Data
     PlayerData player;
 
-    private string url = "https://citmalumnes.upc.es/~ismaeltc1/PHPConect.php";
+    private string urlUser = "https://citmalumnes.upc.es/~ismaeltc1/PHPConect.php";
+    private string urlSessions = "https://citmalumnes.upc.es/~ismaeltc1/PHPSessions.php";
     private bool canSave = false;
+    private bool canSaveSession = false;
     WWW web;
 
     IEnumerator UpdateInfo()
@@ -21,7 +23,7 @@ public class Server : MonoBehaviour
         form.AddField("Country", player.country);
         form.AddField("Date", DateTime.Now.ToString("yyyy-MM-dd"));
       
-        web = new WWW(url,form);
+        web = new WWW(urlUser,form);
         yield return web;
 
         if (web.error != null)
@@ -31,18 +33,50 @@ public class Server : MonoBehaviour
         else
         {
             Debug.Log("Success!");
-            string test = web.text;
-            Debug.Log(test);
+            string idUser = web.text;
+            Debug.Log(idUser);
+            player.id = uint.Parse(idUser);
+            CallbackEvents.OnAddPlayerCallback?.Invoke(player.id);
+        }
+        web.Dispose();
+        Debug.Log("Courutineee");
+    }
+
+    IEnumerator UpdateSessions(uint userID)
+    {
+
+        WWWForm form = new WWWForm();
+
+        form.AddField("StartSession", DateTime.Now.ToString("yyyy-MM-dd"));
+        form.AddField("IdUser", userID.ToString());
+
+        web = new WWW(urlSessions, form);
+        yield return web;
+
+        if (web.error != null)
+        {
+            Debug.Log("Failed" + web.error);
+        }
+        else
+        {
+            Debug.Log("Success!");
+            string idSession = web.text;
+            Debug.Log(idSession);
         }
         web.Dispose();
     }
-
     private void Update()
     {
         if (canSave)
         {
             StartCoroutine(UpdateInfo());
             canSave = false;
+            Debug.Log("canSave False");
+        }
+        if (canSaveSession)
+        {
+            StartCoroutine(UpdateSessions(player.id));
+            canSaveSession = false;
         }
     }
 
@@ -50,5 +84,9 @@ public class Server : MonoBehaviour
     {
         player = data;
         canSave = true;
+    }
+    public void SaveSessions()
+    {
+        canSaveSession = true;
     }
 }

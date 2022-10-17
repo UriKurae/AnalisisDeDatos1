@@ -19,6 +19,7 @@ public class PlayerData : EventData
     // Data from the player
     public string name, country;
     public DateTime data;
+    public uint id;
 
     public override string GetData()
     {
