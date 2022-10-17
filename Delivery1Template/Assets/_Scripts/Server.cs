@@ -85,7 +85,7 @@ public class Server : MonoBehaviour
             string idPurchase = web.text;
             Debug.Log("purchaseID: " + idPurchase);
             player.idPurchase = int.Parse(idPurchase);
-            //CallbackEvents.OnNewSessionCallback?.Invoke(player.idSession);
+            CallbackEvents.OnItemBuyCallback?.Invoke();
         }
         web.Dispose();
     }
@@ -108,7 +108,10 @@ public class Server : MonoBehaviour
         {
             string idSession = web.text;
             Debug.Log("endSessionID: " + idSession);
+            player.idSession = uint.Parse(idSession);
+            CallbackEvents.OnEndSessionCallback?.Invoke(player.idSession);
         }
+
         web.Dispose();
     }
     private void Update()
