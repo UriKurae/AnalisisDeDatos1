@@ -18,7 +18,7 @@ public class AnalyticsController : MonoBehaviour
 
     private void ItemBought(int arg1, DateTime arg2)
     {
-        //throw new NotImplementedException();
+        phpServer.SavePurchase(arg1, arg2);
     }
 
     private void EndSessionAdded(DateTime obj)

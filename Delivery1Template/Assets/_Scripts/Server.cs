@@ -11,9 +11,8 @@ public class Server : MonoBehaviour
 
     private string urlUser = "https://citmalumnes.upc.es/~ismaeltc1/PHPConect.php";
     private string urlSessions = "https://citmalumnes.upc.es/~ismaeltc1/PHPSessions.php";
-    private bool canSave = false;
-    private bool canSaveSession = false;
-    private bool canSaveSessionEnd = false;
+    private string urlPurchases = "https://citmalumnes.upc.es/~ismaeltc1/PHPPurchases.php";
+    private bool canSave, canSaveSession, canSavePurchases, canSaveSessionEnd = false;
     WWW web;
 
     IEnumerator UpdateInfo()
@@ -39,7 +38,6 @@ public class Server : MonoBehaviour
             CallbackEvents.OnAddPlayerCallback?.Invoke(player.id);
         }
         web.Dispose();
-        Debug.Log("Courutineee");
     }
 
     IEnumerator UpdateSessions(uint userID)
@@ -63,6 +61,31 @@ public class Server : MonoBehaviour
             Debug.Log("sessionID: " + idSession);
             player.idSession = uint.Parse(idSession);
             CallbackEvents.OnNewSessionCallback?.Invoke(player.idSession);
+        }
+        web.Dispose();
+    }
+    IEnumerator UpdatePurchases(uint sessionId)
+    {
+
+        WWWForm form = new WWWForm();
+
+        form.AddField("IdSession", sessionId.ToString());
+        form.AddField("IdItem", player.idItem.ToString());
+        form.AddField("Date", player.datePurchase.ToString("yyyy-MM-dd"));
+
+        web = new WWW(urlPurchases, form);
+        yield return web;
+
+        if (web.error != null)
+        {
+            Debug.Log("Failed" + web.error);
+        }
+        else
+        {
+            string idPurchase = web.text;
+            Debug.Log("purchaseID: " + idPurchase);
+            player.idPurchase = int.Parse(idPurchase);
+            //CallbackEvents.OnNewSessionCallback?.Invoke(player.idSession);
         }
         web.Dispose();
     }
@@ -100,6 +123,11 @@ public class Server : MonoBehaviour
             StartCoroutine(UpdateSessions(player.id));
             canSaveSession = false;
         }
+        if (canSavePurchases)
+        {
+            StartCoroutine(UpdatePurchases(player.idSession));
+            canSavePurchases = false;
+        }
         if (canSaveSessionEnd)
         {
             StartCoroutine(UpdateSessionsEnd(player.idSession));
@@ -121,5 +149,11 @@ public class Server : MonoBehaviour
     {
         player.dataSessionEnd = obj;
         canSaveSession = true;
+    }
+    public void SavePurchase(int idItem, DateTime date)
+    {
+        player.idItem = idItem;
+        player.datePurchase = date;
+        canSavePurchases = true;
     }
 }
