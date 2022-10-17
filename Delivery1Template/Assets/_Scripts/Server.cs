@@ -13,6 +13,7 @@ public class Server : MonoBehaviour
     private string urlSessions = "https://citmalumnes.upc.es/~ismaeltc1/PHPSessions.php";
     private bool canSave = false;
     private bool canSaveSession = false;
+    private bool canSaveSessionEnd = false;
     WWW web;
 
     IEnumerator UpdateInfo()
@@ -21,7 +22,7 @@ public class Server : MonoBehaviour
 
         form.AddField("Name", player.name);
         form.AddField("Country", player.country);
-        form.AddField("Date", DateTime.Now.ToString("yyyy-MM-dd"));
+        form.AddField("Date", player.data.ToString("yyyy-MM-dd"));
       
         web = new WWW(urlUser,form);
         yield return web;
@@ -32,9 +33,8 @@ public class Server : MonoBehaviour
         }
         else
         {
-            Debug.Log("Success!");
             string idUser = web.text;
-            Debug.Log(idUser);
+            Debug.Log("userID: " + idUser);
             player.id = uint.Parse(idUser);
             CallbackEvents.OnAddPlayerCallback?.Invoke(player.id);
         }
@@ -47,7 +47,7 @@ public class Server : MonoBehaviour
 
         WWWForm form = new WWWForm();
 
-        form.AddField("StartSession", DateTime.Now.ToString("yyyy-MM-dd"));
+        form.AddField("StartSession", player.dataSession.ToString("yyyy-MM-dd"));
         form.AddField("IdUser", userID.ToString());
 
         web = new WWW(urlSessions, form);
@@ -59,9 +59,32 @@ public class Server : MonoBehaviour
         }
         else
         {
-            Debug.Log("Success!");
             string idSession = web.text;
-            Debug.Log(idSession);
+            Debug.Log("sessionID: " + idSession);
+            player.idSession = uint.Parse(idSession);
+            CallbackEvents.OnNewSessionCallback?.Invoke(player.idSession);
+        }
+        web.Dispose();
+    }
+    IEnumerator UpdateSessionsEnd(uint sessionID)
+    {
+
+        WWWForm form = new WWWForm();
+
+        form.AddField("EndSession", player.dataSessionEnd.ToString("yyyy-MM-dd"));
+        form.AddField("IdSession", sessionID.ToString());
+
+        web = new WWW(urlSessions, form);
+        yield return web;
+
+        if (web.error != null)
+        {
+            Debug.Log("Failed" + web.error);
+        }
+        else
+        {
+            string idSession = web.text;
+            Debug.Log("endSessionID: " + idSession);
         }
         web.Dispose();
     }
@@ -71,12 +94,16 @@ public class Server : MonoBehaviour
         {
             StartCoroutine(UpdateInfo());
             canSave = false;
-            Debug.Log("canSave False");
         }
         if (canSaveSession)
         {
             StartCoroutine(UpdateSessions(player.id));
             canSaveSession = false;
+        }
+        if (canSaveSessionEnd)
+        {
+            StartCoroutine(UpdateSessionsEnd(player.idSession));
+            canSaveSessionEnd = false;
         }
     }
 
@@ -85,8 +112,14 @@ public class Server : MonoBehaviour
         player = data;
         canSave = true;
     }
-    public void SaveSessions()
+    public void SaveSessions(DateTime obj)
     {
+        player.dataSession = obj;
+        canSaveSession = true;
+    }
+    public void SaveSessionsEnd(DateTime obj)
+    {
+        player.dataSessionEnd = obj;
         canSaveSession = true;
     }
 }
