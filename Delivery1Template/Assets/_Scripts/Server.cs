@@ -108,7 +108,7 @@ public class Server : MonoBehaviour
         {
             string idSession = web.text;
             Debug.Log("endSessionID: " + idSession);
-            player.idSession = uint.Parse(idSession);
+            //player.idSession = uint.Parse(idSession);
             CallbackEvents.OnEndSessionCallback?.Invoke(player.idSession);
         }
 
@@ -151,7 +151,7 @@ public class Server : MonoBehaviour
     public void SaveSessionsEnd(DateTime obj)
     {
         player.dataSessionEnd = obj;
-        canSaveSession = true;
+        canSaveSessionEnd = true;
     }
     public void SavePurchase(int idItem, DateTime date)
     {
