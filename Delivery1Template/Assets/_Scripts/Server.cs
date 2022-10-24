@@ -21,7 +21,7 @@ public class Server : MonoBehaviour
 
         form.AddField("Name", player.name);
         form.AddField("Country", player.country);
-        form.AddField("Date", player.data.ToString("yyyy-MM-dd"));
+        form.AddField("Date", player.data.ToString("yyyy-MM-dd HH:mm:ss"));
       
         web = new WWW(urlUser,form);
         yield return web;
@@ -45,7 +45,7 @@ public class Server : MonoBehaviour
 
         WWWForm form = new WWWForm();
 
-        form.AddField("StartSession", player.dataSession.ToString("yyyy-MM-dd"));
+        form.AddField("StartSession", player.dataSession.ToString("yyyy-MM-dd HH:mm:ss"));
         form.AddField("IdUser", userID.ToString());
 
         web = new WWW(urlSessions, form);
@@ -71,7 +71,7 @@ public class Server : MonoBehaviour
 
         form.AddField("IdSession", sessionId.ToString());
         form.AddField("IdItem", player.idItem.ToString());
-        form.AddField("Date", player.datePurchase.ToString("yyyy-MM-dd"));
+        form.AddField("Date", player.datePurchase.ToString("yyyy-MM-dd HH:mm:ss"));
 
         web = new WWW(urlPurchases, form);
         yield return web;
@@ -94,7 +94,7 @@ public class Server : MonoBehaviour
 
         WWWForm form = new WWWForm();
 
-        form.AddField("EndSession", player.dataSessionEnd.ToString("yyyy-MM-dd"));
+        form.AddField("EndSession", player.dataSessionEnd.ToString("yyyy-MM-dd HH:mm:ss"));
         form.AddField("IdSession", sessionID.ToString());
 
         web = new WWW(urlSessions, form);
