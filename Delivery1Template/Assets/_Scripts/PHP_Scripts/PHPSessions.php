@@ -34,12 +34,13 @@ else if (isset($_REQUEST["EndSession"]) && isset($_REQUEST["IdSession"]))
 {
   $endSession = $_POST["EndSession"];
   $idSession = $_POST["IdSession"];
-  //echo "Received ". $_POST["Name"] . " Sucessfully received";
 
-  $query = "UPDATE `Sessions` SET EndSession = $endSession WHERE IdSession = $idSession";
+  $query = "UPDATE `Sessions` SET EndSession = '$endSession' WHERE IdSession = $idSession";
+
+  //$query = "UPDATE `Sessions` SET EndSession = $endSession WHERE IdSession = $idSession";
   $result = mysqli_query($conn,$query) or die('just  died2');
-  $last_inserted = mysqli_insert_id($conn);
-  print($last_inserted);
+  //$last_inserted = mysqli_insert_id($conn);
+  //print($last_inserted);
 
   exit();
 }

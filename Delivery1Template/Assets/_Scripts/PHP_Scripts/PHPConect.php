@@ -19,11 +19,10 @@ $result = $conn->query($sql);
 
 if (isset($_REQUEST["Name"]) && isset($_REQUEST["Country"]) && isset($_REQUEST["Date"]))
 {
-  $name = $_POST["Name"];
+  $name = mysqli_real_escape_string($conn, $_POST["Name"]);
   $country = $_POST["Country"];
   $timestamp = $_POST["Date"];
   //echo "Received ". $_POST["Name"] . " Sucessfully received";
-
   $query = "INSERT INTO `Users` (`Name`, `Country`, `Date`) VALUES ('$name', '$country', '$timestamp')";
   $result = mysqli_query($conn,$query) or die('just  died');
   $last_inserted = mysqli_insert_id($conn);
