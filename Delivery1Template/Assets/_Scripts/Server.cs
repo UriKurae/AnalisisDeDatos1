@@ -21,7 +21,7 @@ public class Server : MonoBehaviour
 
         form.AddField("Name", player.name);
         form.AddField("Country", player.country);
-        form.AddField("Date", player.data.ToString("yyyy-MM-dd HH:mm:ss"));
+        form.AddField("DateCreation", player.data.ToString("yyyy-MM-dd HH:mm:ss"));
       
         web = new WWW(urlUser,form);
         yield return web;
@@ -71,7 +71,7 @@ public class Server : MonoBehaviour
 
         form.AddField("IdSession", sessionId.ToString());
         form.AddField("IdItem", player.idItem.ToString());
-        form.AddField("Date", player.datePurchase.ToString("yyyy-MM-dd HH:mm:ss"));
+        form.AddField("DatePurchase", player.datePurchase.ToString("yyyy-MM-dd HH:mm:ss"));
 
         web = new WWW(urlPurchases, form);
         yield return web;

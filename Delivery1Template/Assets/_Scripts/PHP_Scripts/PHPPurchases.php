@@ -17,13 +17,13 @@ if ($conn->connect_error) {
 $sql = "SELECT IdSession, IdItem, Date FROM Purchases";
 $result = $conn->query($sql);
 
-if (isset($_REQUEST["IdSession"]) && isset($_REQUEST["IdItem"]) && isset($_REQUEST["Date"]))
+if (isset($_REQUEST["IdSession"]) && isset($_REQUEST["IdItem"]) && isset($_REQUEST["DatePurchase"]))
 {
   $idSession = $_POST["IdSession"];
   $idItem = $_POST["IdItem"];
-  $date = $_POST["Date"];
+  $date = $_POST["DatePurchase"];
 
-  $query = "INSERT INTO `Purchases` (`IdSession`, `IdItem`, `Date`) VALUES ('$idSession', '$idItem', '$date')";
+  $query = "INSERT INTO `Purchases` (`IdSession`, `IdItem`, `DatePurchase`) VALUES ('$idSession', '$idItem', '$date')";
   $result = mysqli_query($conn,$query) or die('just  died');
   $last_inserted = mysqli_insert_id($conn);
   print($last_inserted);

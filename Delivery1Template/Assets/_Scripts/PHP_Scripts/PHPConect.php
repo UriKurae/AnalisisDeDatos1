@@ -14,16 +14,16 @@ if ($conn->connect_error) {
 
 //$sql = "INSERT INTO `Users` (`IdUser`, `Name`, `Country`, `Date`) VALUES ('265254215', 'testUser12', 'Suiza', '2022-5-29')";
 
-$sql = "SELECT IdUser, Name, Country, Date FROM Users";
+$sql = "SELECT IdUser, Name, Country, DateCreation FROM Users";
 $result = $conn->query($sql);
 
-if (isset($_REQUEST["Name"]) && isset($_REQUEST["Country"]) && isset($_REQUEST["Date"]))
+if (isset($_REQUEST["Name"]) && isset($_REQUEST["Country"]) && isset($_REQUEST["DateCreation"]))
 {
   $name = mysqli_real_escape_string($conn, $_POST["Name"]);
   $country = $_POST["Country"];
-  $timestamp = $_POST["Date"];
+  $timestamp = $_POST["DateCreation"];
   //echo "Received ". $_POST["Name"] . " Sucessfully received";
-  $query = "INSERT INTO `Users` (`Name`, `Country`, `Date`) VALUES ('$name', '$country', '$timestamp')";
+  $query = "INSERT INTO `Users` (`Name`, `Country`, `DateCreation`) VALUES ('$name', '$country', '$timestamp')";
   $result = mysqli_query($conn,$query) or die('just  died');
   $last_inserted = mysqli_insert_id($conn);
   print($last_inserted);
